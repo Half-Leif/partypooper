@@ -1,22 +1,26 @@
 package com.ustwo.pp;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.authentication.SpotifyAuthentication;
+import com.spotify.sdk.android.playback.ConnectionStateCallback;
+import com.spotify.sdk.android.playback.PlayerNotificationCallback;
+import com.spotify.sdk.android.playback.PlayerState;
 
 
-public class LoginActivity extends Activity implements OnClickListener{
+public class LoginActivity extends Activity implements OnClickListener,
+PlayerNotificationCallback, ConnectionStateCallback {
 
     public final static String CLIENT_ID = "4f4f6566906848249c34aeccb656f697";
-    public static final String REDIRECT_URL = "partypooper://auth";
     public final static String TAG = "LoginActivity";
     EditText emailEditText, passwordEditText;
     Button loginButton;
@@ -29,6 +33,19 @@ public class LoginActivity extends Activity implements OnClickListener{
         setContentView(R.layout.activity_login);
         initUI();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        System.out.println(">>>>>>>> On new intent");
+        Uri uri = intent.getData();
+        if (uri != null) {
+            AuthenticationResponse response = SpotifyAuthentication
+                    .parseOauthResponse(uri);
+            System.out.println(">>>>>>> Got response" + uri.toString());
+        }
+    }
+
     private void initUI(){
 
         //Login TextFields
@@ -42,32 +59,17 @@ public class LoginActivity extends Activity implements OnClickListener{
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-    @Override
     public void onClick(View v) {
         switch(v.getId()){
 
         case R.id.login_button:
             Log.v(TAG, "Log in");
-            //SPOTIFY AUTHENTICATION
+            String callbackUrl = getString(R.string.spotify_redirect_scheme)
+                    + "://" + getString(R.string.spotify_redirect_host);
+            System.out.println(">>>>> callbackUrl is " + callbackUrl);
             SpotifyAuthentication.openAuthWindow(CLIENT_ID, "token",
-                    REDIRECT_URL, new String[] { "user-read-private" }, null,
+                    callbackUrl,
+                    new String[] { "user-read-private" }, null,
                     this);
             break;
 
@@ -76,4 +78,54 @@ public class LoginActivity extends Activity implements OnClickListener{
 
         }
     }
+
+    @Override
+    public void onConnectionMessage(String arg0) {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>> onConnectionMessage " + arg0);
+    }
+
+    @Override
+    public void onLoggedIn() {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>> onLoggedIn");
+
+    }
+
+    @Override
+    public void onLoggedOut() {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>>>> onLoggedOut");
+    }
+
+    @Override
+    public void onLoginFailed(Throwable arg0) {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>>>>> onLoginFailed");
+    }
+
+    @Override
+    public void onNewCredentials(String arg0) {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>> onNewCredentials " + arg0);
+    }
+
+    @Override
+    public void onTemporaryError() {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>>> onTemporaryError");
+    }
+
+    @Override
+    public void onPlaybackError(ErrorType arg0, String arg1) {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>>>> onPlaybackError" + arg0 + ", " + arg1);
+    }
+
+    @Override
+    public void onPlaybackEvent(EventType arg0, PlayerState arg1) {
+        // TODO Auto-generated method stub
+        System.out.println(">>>>>>>>>> onPlaybackEvent");
+    }
+
 }

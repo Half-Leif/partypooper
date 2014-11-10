@@ -47,6 +47,8 @@ public final class R {
         public static final int login_header=0x7f050003;
         public static final int login_password=0x7f050006;
         public static final int login_text=0x7f050004;
+        public static final int spotify_redirect_host=0x7f050008;
+        public static final int spotify_redirect_scheme=0x7f050009;
     }
     public static final class style {
         /** 
