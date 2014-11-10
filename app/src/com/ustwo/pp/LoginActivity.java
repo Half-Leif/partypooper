@@ -4,14 +4,22 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class LoginActivity extends Activity {
-
+	
+	EditText emailEditText, passwordEditText;
+	Button loginButton;
+	TextView loginHeader, loginText;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        
     }
 
 
