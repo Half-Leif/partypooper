@@ -1,27 +1,43 @@
 package com.ustwo.pp;
 
+import com.spotify.sdk.android.authentication.SpotifyAuthentication;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 
-public class LoginActivity extends Activity {
-	
+public class LoginActivity extends Activity implements OnClickListener{
+	public final static String CLIENT_ID = "some_id";
+	public final static String TAG = "LoginActivity";
 	EditText emailEditText, passwordEditText;
 	Button loginButton;
-	TextView loginHeader, loginText;
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        
+        initUI();
     }
+    private void initUI(){
+    	
+    	//Login TextFields
+    	emailEditText = (EditText) findViewById(R.id.login_email);
+    	passwordEditText = (EditText) findViewById(R.id.login_password);
+    	
+    	//Login button
+    	loginButton = (Button) findViewById(R.id.login_button);
+    	loginButton.setOnClickListener(this);
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,4 +57,19 @@ public class LoginActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		
+		case R.id.login_button:
+			Log.v(TAG, "Log in");
+			//SPOTIFY AUTHENTICATION
+			//SpotifyAuthentication.openAuthWindow(CLIENT_ID,"Authtoken", arg2, arg3, arg4, arg5)
+			break;
+		
+		default:
+			break;
+			
+		}		
+	}
 }
