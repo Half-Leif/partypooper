@@ -4,11 +4,11 @@
     <string name="app_name">PartyPooper</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    
     <string name="login_header">Party Pooper</string>
-    <string name="login_text">Login</string>
+    <string name="login_text">Loading...</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_button">Login</string>
-    
+    <string name="title_activity_startup">StartupActivity</string>
+
 </resources>

@@ -6,15 +6,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.ustwo.pp.LoginActivity" >
+    tools:context="com.ustwo.pp.StartupActivity" >
 
     <TextView
-        android:id="@+id/login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/login_text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Choose server" />
 
+    
 </RelativeLayout>
