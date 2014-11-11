@@ -57,33 +57,12 @@ PlayerNotificationCallback, ConnectionStateCallback {
         if (uri != null) {
             AuthenticationResponse response = SpotifyAuthentication
                     .parseOauthResponse(uri);
-            System.out.println(">>>>>>> Got response" + uri.toString());
+            System.out.println(">>>>>>> Got response" + uri.toString()+"\tResponse: "+response);
             nextScreen();
             
         }
     }
-/*
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-
-        case R.id.login_button:
-            Log.v(TAG, "Log in");
-            String callbackUrl = getString(R.string.spotify_redirect_scheme)
-                    + "://" + getString(R.string.spotify_redirect_host);
-            System.out.println(">>>>> callbackUrl is " + callbackUrl);
-            SpotifyAuthentication.openAuthWindow(CLIENT_ID, "token",
-                    callbackUrl,
-                    new String[] { "user-read-private" }, null,
-                    this);
-            break;
-
-        default:
-            break;
-
-        }
-    }
-*/
+    
     @Override
     public void onConnectionMessage(String arg0) {
         // TODO Auto-generated method stub
