@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,6 +13,8 @@ import com.spotify.sdk.android.authentication.SpotifyAuthentication;
 import com.spotify.sdk.android.playback.ConnectionStateCallback;
 import com.spotify.sdk.android.playback.PlayerNotificationCallback;
 import com.spotify.sdk.android.playback.PlayerState;
+import com.ustwo.pp.network.JsonParser;
+import com.ustwo.pp.network.ServerConnection;
 
 
 public class LoginActivity extends Activity implements
@@ -35,34 +36,44 @@ PlayerNotificationCallback, ConnectionStateCallback {
         //initUI();
     }
     private void callSpotify(){
-    	 Log.v(TAG, "Log in");
-         String callbackUrl = getString(R.string.spotify_redirect_scheme)
-                 + "://" + getString(R.string.spotify_redirect_host);
-         System.out.println(">>>>> callbackUrl is " + callbackUrl);
-         SpotifyAuthentication.openAuthWindow(CLIENT_ID, "token",
-                 callbackUrl,
-                 new String[] { "user-read-private" }, null,
-                 this);
+        Log.v(TAG, "Log in");
+        String callbackUrl = getString(R.string.spotify_redirect_scheme)
+                + "://" + getString(R.string.spotify_redirect_host);
+        SpotifyAuthentication.openAuthWindow(CLIENT_ID, "code",
+                callbackUrl,
+                new String[] { "user-read-private" }, null,
+                this);
     }
     private void nextScreen(){
-    	Intent startupIntent = new Intent(this, StartupActivity.class);
-    	this.startActivity(startupIntent);
-    	this.finish();
+        Intent startupIntent = new Intent(this, StartupActivity.class);
+        this.startActivity(startupIntent);
+        this.finish();
     }
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        System.out.println(">>>>>>>> On new intent");
         Uri uri = intent.getData();
         if (uri != null) {
             AuthenticationResponse response = SpotifyAuthentication
                     .parseOauthResponse(uri);
-            System.out.println(">>>>>>> Got response" + uri.toString()+"\tResponse: "+response);
+
+            String[] splitResponse = uri.toString().split("[\\?&]");
+            final String code = splitResponse[1];
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ServerConnection connection = new ServerConnection();
+                    JsonParser parser = new JsonParser();
+                    connection
+                    .post("https://partypooper-staging.herokuapp.com/api/users/token",
+                            code, parser);
+                }
+            }).start();
             nextScreen();
-            
         }
     }
-    
+
     @Override
     public void onConnectionMessage(String arg0) {
         // TODO Auto-generated method stub
