@@ -14,6 +14,7 @@ import com.spotify.sdk.android.playback.ConnectionStateCallback;
 import com.spotify.sdk.android.playback.PlayerNotificationCallback;
 import com.spotify.sdk.android.playback.PlayerState;
 import com.ustwo.pp.network.JsonParser;
+import com.ustwo.pp.network.ParsedContent;
 import com.ustwo.pp.network.ServerConnection;
 
 
@@ -58,22 +59,38 @@ PlayerNotificationCallback, ConnectionStateCallback {
                     .parseOauthResponse(uri);
 
             String[] splitResponse = uri.toString().split("[\\?&]");
+            
             final String code = splitResponse[1];
-
+            System.out.println("<<<<< CODE >>>>\n\n"+code+"\n\n<<<<< CODE >>>>");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     ServerConnection connection = new ServerConnection();
+                    
                     JsonParser parser = new JsonParser();
                     connection
                     .post("https://partypooper-staging.herokuapp.com/api/users/token",
                             code, parser);
+                
+                 	ParsedContent parsedContent = new ParsedContent(parser.getRoot());
+                 	//System.out.println("Expires in: "+ parsedContent.getExpiresIn()+"\tAccess Token: "+parsedContent.getAccessToken());
+                 	String accessToken = null;
+                 	if((accessToken = parsedContent.getAccessToken()) != null){
+                 		final String accessBody = "{\"user\":{\"sp_access_token\":\""+accessToken+"\"}}";
+                 		//TODO StatusCode: 500   Message: Internal Server Error            
+                 		System.out.println("<<<<<<<<<<< ACCESS_BODY >>>>>>>>>>\n"+accessBody+"\n<<<<<<<<<<< ACCESS_BODY >>>>>>>>>>");
+                 		connection.jsonPost("https://partypooper-staging.herokuapp.com/api/users.json", accessBody, parser);
+                 		User user = new User(parser.getRoot());
+                 		System.out.println("<><><><><><><><><> User.name = "+user.getName());
+                 		
+                 		
+                 	}
                 }
             }).start();
             nextScreen();
         }
     }
-
+    
     @Override
     public void onConnectionMessage(String arg0) {
         // TODO Auto-generated method stub
