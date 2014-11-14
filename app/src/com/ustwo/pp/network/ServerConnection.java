@@ -10,6 +10,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+
 import android.util.Log;
 
 public class ServerConnection {
@@ -42,6 +46,8 @@ public class ServerConnection {
 			Log.v(TAG, "StatusCode:\t" + statusCode + "\nMessage:\t" + message);
 			if (statusCode == HttpURLConnection.HTTP_OK) {
 				InputStream input = connection.getInputStream();
+				
+
 				parser.parse(input);
 			}
 		} catch (MalformedURLException e) {
@@ -56,7 +62,7 @@ public class ServerConnection {
 			}
 		}
 	}
-
+	
 	public void jsonPost(final String url, final String body, Parser parser) {
 		OutputStream out = null;
 		try {
@@ -79,6 +85,7 @@ public class ServerConnection {
 			Log.v(TAG, "StatusCode:\t" + statusCode + "\nMessage:\t" + message);
 			if (statusCode == HttpURLConnection.HTTP_OK) {
 				InputStream input = connection.getInputStream();
+				
 				parser.parse(input);
 			}
 		} catch (MalformedURLException e) {
@@ -93,7 +100,42 @@ public class ServerConnection {
 			}
 		}
 	}
+	public void jsonGet(final String url, final String token, Parser parser) {
+		OutputStream out = null;
+		try {
+			connection = (HttpURLConnection) new URL(url).openConnection();
+			final String mToken = "Token token="+token;
+			connection.addRequestProperty("Authorization",mToken);
+			
+			connection.setRequestMethod("GET");
+		    //connection.setDoInput(true);
+			//connection.setDoOutput(false);
+			connection.connect();
 
+			int statusCode = connection.getResponseCode();
+			String message = connection.getResponseMessage();
+			Log.v(TAG, "StatusCode:\t" + statusCode + "\nMessage:\t" + message);
+			if (statusCode == HttpURLConnection.HTTP_OK) {
+				InputStream input = connection.getInputStream();
+				//String json = ServerConnection.readStream(input);
+				//JSONArray roots;
+				
+	            //root = new JSONObject(json);
+				parser.parseArray(input);
+				
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+			}
+		}
+	}
 	public static String readStream(InputStream input) {
 		String textToReturn = "";
 		BufferedReader reader = new BufferedReader(new InputStreamReader(input));

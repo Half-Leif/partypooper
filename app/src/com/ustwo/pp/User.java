@@ -3,6 +3,8 @@ package com.ustwo.pp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.support.v4.media.session.MediaSessionCompat.Token;
+
 public class User {
 	private static final String KEY_ID = "id";
 	private static final String KEY_CREATED_AT = "created_at";
@@ -34,6 +36,7 @@ public class User {
 	public String getId() {
 		return id;
 	}
+
 
 	private String getString(JSONObject root, String key) {
 		try {
