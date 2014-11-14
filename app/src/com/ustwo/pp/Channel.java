@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Server {
+public class Channel {
 	private static final String KEY_ID = "id";
 	private static final String KEY_UPDATED_AT = "updated_at";
 	private static final String KEY_SUBSCRIBER_COUNT = "subscriber_count";
@@ -31,7 +31,7 @@ public class Server {
 	*/
 	private ArrayList<Message> messages;
 
-	public Server(JSONObject root) {
+	public Channel(JSONObject root) {
 
 		this.id = (String) getObject(root, KEY_ID);
 		this.updatedAt = (String) getObject(root, KEY_UPDATED_AT);
@@ -45,7 +45,6 @@ public class Server {
 		for (int i = 0; i < messageArray.length(); i++) {
 				try {
 					Message message = new Message(messageArray.getJSONObject(i));
-					System.out.println("MESSAGE: "+message);
 					messages.add(message);
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -119,11 +118,11 @@ class Message {
 	User user;
 	
 	Message(JSONObject root) {
-		this.id = (String) Server.getObject(root, MESSAGE_KEY_ID);
-		this.body = (String) Server.getObject(root, MESSAGE_KEY_BODY);
-		this.createdAt = (String) Server.getObject(root, MESSAGE_KEY_CREATED_AT);
-		this.updatedAt = (String) Server.getObject(root, MESSAGE_KEY_UPDATED_AT);
-		this.user = new User(Server.getJSONObject(root, MESSAGE_KEY_USER));
+		this.id = (String) Channel.getObject(root, MESSAGE_KEY_ID);
+		this.body = (String) Channel.getObject(root, MESSAGE_KEY_BODY);
+		this.createdAt = (String) Channel.getObject(root, MESSAGE_KEY_CREATED_AT);
+		this.updatedAt = (String) Channel.getObject(root, MESSAGE_KEY_UPDATED_AT);
+		this.user = new User(Channel.getJSONObject(root, MESSAGE_KEY_USER));
 		
 	}
 	public String getId() {

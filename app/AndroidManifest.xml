@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".StartupActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_startup" >
         </activity>
     </application>

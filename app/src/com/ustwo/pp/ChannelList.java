@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class ServerList {
+public class ChannelList {
 
-	public ArrayList<Server> servers;
+	public ArrayList<Channel> servers;
 
-	public ServerList(JSONArray rootArray) {
-		servers = new ArrayList<Server>();
+	public ChannelList(JSONArray rootArray) {
+		servers = new ArrayList<Channel>();
 		int len = rootArray.length();
 		for (int i = 0; i < len; i++) {
 			try {
-				Server server = new Server(rootArray.getJSONObject(i));
+				Channel server = new Channel(rootArray.getJSONObject(i));
 				servers.add(server);
 				
 			} catch (JSONException e) {
@@ -24,7 +24,7 @@ public class ServerList {
 		}
 
 	}
-	public ArrayList<Server> getServers(){
+	public ArrayList<Channel> getServers(){
 		return servers;
 	}
 

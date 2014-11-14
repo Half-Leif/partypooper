@@ -43,8 +43,8 @@ PlayerNotificationCallback, ConnectionStateCallback {
     }
 
     private void nextScreen(User user) {
-        Intent startupIntent = new Intent(this, StartupActivity.class);
-        startupIntent.putExtra(StartupActivity.EXTRA_USER, user);
+        Intent startupIntent = new Intent(this, MainActivity.class);
+        startupIntent.putExtra(MainActivity.EXTRA_USER, user);
         this.startActivity(startupIntent);
         this.finish();
     }
@@ -88,7 +88,8 @@ PlayerNotificationCallback, ConnectionStateCallback {
                         User user = new User(parser.getRoot());
 
                         if (user.getAccessToken() != null) {
-                            connection
+                        	nextScreen(user);
+                        /*    connection
                             .jsonGet(
                                     "https://partypooper-staging.herokuapp.com/api/channels.json",
                                     user.getAccessToken(), parser);
@@ -97,9 +98,9 @@ PlayerNotificationCallback, ConnectionStateCallback {
                                 for (Message mess : server.getMessages()){
                                     System.out.println("Server "+server.getName()+" has Message from user "+mess.getUser().getName()+":\n"+mess.getBody()+"\n ");
                                 }
-                            }
+                            }*/
                         }
-                        nextScreen(user);
+                        
                     }
                 }
             }).start();
